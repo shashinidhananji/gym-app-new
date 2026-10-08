@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
+import { isSupabaseConfigured, supabase } from '../lib/supabase'
 import { useAuth } from '../auth/AuthProvider'
+import SetupNotice from './SetupNotice'
 
 export default function Login() {
   const { session } = useAuth()
@@ -25,6 +26,7 @@ export default function Login() {
   return (
     <div className="auth-card">
       <h1>Sign in</h1>
+      {!isSupabaseConfigured && <SetupNotice />}
       <form onSubmit={onSubmit}>
         <input
           type="email"

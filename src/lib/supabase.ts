@@ -9,4 +9,8 @@ if (!url || !anonKey) {
   )
 }
 
+// Placeholder .env values let the app boot but every request fails with an
+// opaque "Failed to fetch", so surface it as a setup problem instead.
+export const isSupabaseConfigured = !url.includes('placeholder')
+
 export const supabase = createClient(url, anonKey)
