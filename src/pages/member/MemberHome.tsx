@@ -36,7 +36,15 @@ export default function MemberHome() {
 
   return (
     <section>
-      <h2>Hi {profile.full_name || 'there'}</h2>
+      <div className="hero">
+        <p className="hero-label">Today</p>
+        <h2>{openCheckIn ? "You're training now" : 'Ready to train?'}</h2>
+        <p className="muted">
+          {isActive
+            ? 'Your membership is active. Scan your QR at the desk to check in.'
+            : 'Activate a membership to get started.'}
+        </p>
+      </div>
 
       <div className="stat-row">
         <div className="card">
