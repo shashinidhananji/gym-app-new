@@ -13,6 +13,8 @@ import Dashboard from './pages/admin/Dashboard'
 import Members from './pages/admin/Members'
 import MemberDetail from './pages/admin/MemberDetail'
 import Plans from './pages/admin/Plans'
+import SetupNotice from './pages/SetupNotice'
+import { isSupabaseConfigured } from './lib/supabase'
 import './App.css'
 
 // Pulls in the camera/QR decoding library, which no other route needs.
@@ -26,6 +28,8 @@ function RootRedirect() {
 }
 
 export default function App() {
+  if (!isSupabaseConfigured) return <SetupNotice fullPage />
+
   return (
     <AuthProvider>
       <BrowserRouter>

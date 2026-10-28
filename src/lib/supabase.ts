@@ -3,14 +3,13 @@ import { createClient } from '@supabase/supabase-js'
 const url = import.meta.env.VITE_SUPABASE_URL
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!url || !anonKey) {
-  throw new Error(
-    'Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY. Copy .env.example to .env and fill them in.',
-  )
-}
+// Missing env vars used to throw here, which killed the bundle before React
+// mounted and left a blank page — the failure mode on a deploy where the
+// variables were never set. Flag it instead and let the app render a notice.
+export const isSupabaseConfigured =
+  Boolean(url) && Boolean(anonKey) && !url.includes('placeholder')
 
-// Placeholder .env values let the app boot but every request fails with an
-// opaque "Failed to fetch", so surface it as a setup problem instead.
-export const isSupabaseConfigured = !url.includes('placeholder')
-
-export const supabase = createClient(url, anonKey)
+export const supabase = createClient(
+  url || 'https://unconfigured.supabase.co',
+  anonKey || 'unconfigured',
+)
