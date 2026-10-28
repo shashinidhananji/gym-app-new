@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import { ProtectedRoute } from './auth/ProtectedRoute'
@@ -11,9 +12,11 @@ import MyQrCode from './pages/member/MyQrCode'
 import Dashboard from './pages/admin/Dashboard'
 import Members from './pages/admin/Members'
 import MemberDetail from './pages/admin/MemberDetail'
-import ScanCheckIn from './pages/admin/ScanCheckIn'
 import Plans from './pages/admin/Plans'
 import './App.css'
+
+// Pulls in the camera/QR decoding library, which no other route needs.
+const ScanCheckIn = lazy(() => import('./pages/admin/ScanCheckIn'))
 
 function RootRedirect() {
   const { session, loading, isStaff } = useAuth()
@@ -45,7 +48,14 @@ export default function App() {
               <Route index element={<Dashboard />} />
               <Route path="members" element={<Members />} />
               <Route path="members/:id" element={<MemberDetail />} />
-              <Route path="scan" element={<ScanCheckIn />} />
+              <Route
+                path="scan"
+                element={
+                  <Suspense fallback={<p className="muted">Loading scanner…</p>}>
+                    <ScanCheckIn />
+                  </Suspense>
+                }
+              />
               <Route path="plans" element={<Plans />} />
             </Route>
           </Route>
